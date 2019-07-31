@@ -1,0 +1,117 @@
+select ename,deptno from emp where exists(select deptno from dept where emp.deptno=dept.deptno)
+select ename,deptno from emp where not exists(select deptno from dept where emp.deptno=dept.deptno)
+select dname,deptno from dept where not exists(select deptno from emp where emp.deptno=dept.deptno)
+
+select e.ename,e.deptno,d.dname from emp e left join dept d on e.deptno=d.deptno
+select e.ename,e.deptno,e.job,d.loc from emp e inner join dept d 
+on d.deptno=e.deptno where e.deptno=20
+select e.ename,d.dname,d.loc from emp e left join dept d on d.deptno=e.deptno
+where e.comm is not null
+
+
+select e.ename,e.job,d.deptno,d.dname from emp e inner join dept d on d.deptno=e.deptno
+where d.loc = 'DALLAS' 
+select * from emp
+
+select e.ename employees,e.empno Emp#,(select ename from emp  where empno=e.mgr) manager,e.mgr Mgr# from emp e
+
+select e.empno Deptno,e.ename Ename,d.loc Loc from emp e,dept d Order by e.deptno
+
+select e.empno,e.ename,e.deptno,d.dname from emp e left join dept d on d.deptno=e.deptno 
+
+select e.empno 员工编号,e.ename 员工名称,e.mgr 经理编号,
+(select ename from emp where empno=e.mgr) 经理名称,e.deptno 员工部门编号,
+d.dname 员工部门名称,(select deptno from emp where empno=e.mgr) 经理部门编号,
+(select dname from dept where deptno=(select deptno from emp where empno=e.mgr)) 经理部门名称
+from emp e left join dept d on e.deptno=d.deptno
+
+
+select ename,deptno from emp where exists(select deptno from dept where emp.deptno=dept.deptno)
+select ename,deptno from emp where not exists(select deptno from dept where emp.deptno=dept.deptno)
+select dname,deptno from dept where not exists(select deptno from emp where emp.deptno=dept.deptno)
+
+select e.ename,e.deptno,d.dname from emp e left join dept d on e.deptno=d.deptno
+select e.ename,e.deptno,e.job,d.loc from emp e inner join dept d 
+on d.deptno=e.deptno where e.deptno=20
+select e.ename,d.dname,d.loc from emp e left join dept d on d.deptno=e.deptno
+where e.comm is not null 
+
+
+select e.ename,e.job,d.deptno,d.dname from emp e inner join dept d on d.deptno=e.deptno
+where d.loc = 'DALLAS' 
+select * from emp
+
+select e.ename employees,e.empno Emp#,(select ename from emp  where empno=e.mgr) manager,e.mgr Mgr# from emp e
+
+select e.empno Deptno,e.ename Ename,d.loc Loc from emp e,dept d Order by e.deptno
+
+select e.empno,e.ename,e.deptno,d.dname from emp e left join dept d on d.deptno=e.deptno 
+
+select e.empno 员工编号,e.ename 员工名称,e.mgr 经理编号,
+(select ename from emp where empno=e.mgr) 经理名称,e.deptno 员工部门编号,
+d.dname 员工部门名称,(select deptno from emp where empno=e.mgr) 经理部门编号,
+(select dname from dept where deptno=(select deptno from emp where empno=e.mgr)) 经理部门名称
+from emp e left join dept d on e.deptno=d.deptno
+
+select ename,hiredate,deptno from emp where deptno=(select deptno from emp where ename='SCOTT')
+
+select empno,ename,sal from emp where sal > (select avg(sal) from emp)
+
+select empno,ename from emp where deptno in(select deptno from emp where ename like '%U%')
+
+select * from dept
+
+select e.ename,d.dname,e.job from emp e inner join dept d on d.deptno=e.deptno 
+where e.deptno=(select deptno from dept where loc='NEW YORK')
+
+select * from emp
+
+select ename,sal from emp where mgr=(select empno from emp where ename='KING')
+
+select * from emp where sal > (select sal from emp where ename ='SMITH')
+
+select * from salgrade
+
+select e.ename,e.sal,s.* from emp e,salgrade s where e.sal>s.losal and e.sal < s.hisal
+
+alter table emp add(sgrade number(10)) 
+select * from emp
+
+update emp e set e.sgrade=(select s.grade from salgrade s where e.sal>s.losal and e.sal < s.hisal )
+
+
+
+
+
+select * from (select ename,sal from emp order by sal desc) where rownum <6
+
+select deptno,sum(sal) s from emp group by deptno order by s desc 
+
+select e.* from (select deptno,sum(sal) s from emp group by deptno order by s desc) e where  rownum<=2 order by e.s asc
+
+select d.dname,e.* from dept d,(select deptno,sum(sal) s from emp group by deptno order by s desc ) e where e.deptno=d.deptno and e.deptno=(select deptno from (select e.* from (select deptno,sum(sal) s from emp group by deptno order by s desc) e where  rownum<=2 order by e.s asc) where rownum <=1)
+
+
+select * from emp where deptno=30 order by sal desc
+
+select * from (select * from emp where deptno=30 order by sal desc) where rownum <=4 order by sal asc
+
+select * from (select * from (select * from emp where deptno=30 order by sal desc) where rownum <=4 order by sal asc) where rownum <3
+
+select empno from emp where rownum <=12
+minus
+select empno from emp where rownum <=9
+
+select * from emp where empno in (select empno from emp where rownum <=12
+minus
+select empno from emp where rownum <=9)
+
+select * from emp order by sal 
+select empno from (select * from emp order by sal) where rownum<=8
+minus
+select empno from (select * from emp order by sal) where rownum<=4
+
+select * from emp where empno in(select empno from (select * from emp order by sal) where rownum<=8
+minus
+select empno from (select * from emp order by sal) where rownum<=4) order by sal
+

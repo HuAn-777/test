@@ -1,0 +1,54 @@
+select * from emp
+select * from emp where sal between 1500 and 3000
+select * from emp where (ename like '%A%') AND  (job='MANAGER' OR JOB='CLERK')
+
+
+SELECT count(*) from emp where comm is not null and (job='MANAGER' OR JOB='CLERK')
+select ename,sal*12 from emp order by sal*12 desc
+update  emp set sal= sal+100 where sal >3000;
+update  emp set sal= sal+200 where sal >1500 and sal<3000;
+update  emp set sal= sal+250 where sal <1500;
+select * from emp where deptno in (10,20)
+select * from emp where ename like '_A%'
+select * from emp where hiredate between to_date('1981/01/01','YYYY/MM/DD') 
+and to_date('1981/12/31','YYYY/MM/DD') OR hiredate between to_date('1987/05/01','YYYY/MM/DD') 
+and to_date('1987/05/31','YYYY/MM/DD')
+
+SELECT * from emp where (joB='MANAGER' AND DEPTNO=10)
+OR (joB='CLERK' AND DEPTNO=20)
+
+SELECT * from emp where (joB='MANAGER' AND DEPTNO=10)
+OR (joB='CLERK' AND DEPTNO=20)
+UNION
+SELECT * from emp where joB!='MANAGER' AND joB!='CLERK' and sal >=2000
+
+select * from emp 
+minus
+select * from emp where ename like '%R%'
+
+create table emp_tmp as select * from emp
+
+select * from emp_tmp
+delete FROM emp_tmp where job='MANAGER'
+
+select * from emp
+union
+select * from emp_tmp
+
+select * from emp
+union all
+select * from emp_tmp
+
+select * from emp
+intersect
+select * from emp_tmp
+
+select * from emp
+minus
+select * from emp_tmp
+
+select ename,sal,(case 
+when sal<1000 then '薪资低'
+when sal>1000 and sal<2000 then '中等'
+else '薪水不错' end) as 薪资状况 
+from emp
